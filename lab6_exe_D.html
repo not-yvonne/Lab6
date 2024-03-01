@@ -2,8 +2,8 @@
 =========================================================
 Name        : lab6_exe_D.html
 Assignment  : Lab 6, Exercise D
-Author(s)   : Mahdi Ansari, William Arthur Philip Louis
-Submission  : May 21, 2030
+Author(s)   : Kosy Onyejemezi, Jeeya Somaiya
+Submission  : Feb 28, 2024
 Description : API Usage.
 =========================================================
 -->
@@ -49,9 +49,6 @@ Description : API Usage.
         async function fetchStudents() {
             fetch('https://65e0d5a9d3db23f7624a2a61.mockapi.io/students')
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
                     return response.json();
                 })
                 .then(studentdata => {
@@ -72,9 +69,8 @@ Description : API Usage.
 
         // Function to fetch and display courses for a student
         async function fetchCourses(studentId) {
-            fetch('https://65e0d5a9d3db23f7624a2a61.mockapi.io/students/1/courses')
+            fetch('https://65e0d5a9d3db23f7624a2a61.mockapi.io/students/${studentId}/courses')
                 .then(response => {
-                    
                     return response.json();
                 })
                 .then(coursedata => {
@@ -87,9 +83,6 @@ Description : API Usage.
                         // Append each <li> to the courseList UL element
                         courseListContainer.appendChild(courselistItem);
                     });
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
                 })
         }
 
