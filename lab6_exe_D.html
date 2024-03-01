@@ -1,0 +1,110 @@
+<!--
+=========================================================
+Name        : lab6_exe_D.html
+Assignment  : Lab 6, Exercise D
+Author(s)   : Mahdi Ansari, William Arthur Philip Louis
+Submission  : May 21, 2030
+Description : API Usage.
+=========================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student and Courses</title>
+	<style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f2f2f2;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+			display: block; /* Use block display */
+			width: max-content; /* Width as per content */
+			width: -moz-max-content; /* For Mozilla */
+			width: -webkit-max-content; /* For Webkit */
+        }
+        li:hover {
+            background-color: #ddd;
+        }
+        #studentList, #courseList {
+            width: 40%;
+        }
+    </style>
+    <script>
+        // Function to fetch and display students
+        async function fetchStudents() {
+            fetch('https://65e0d5a9d3db23f7624a2a61.mockapi.io/students')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(studentdata => {
+                    studentdata.forEach(student => {
+                    const studentlistItem = document.createElement('li');
+                    studentlistItem.textContent = `${student.name} ${student.id}`;
+                    const studentListContainer = document.getElementById('studentList');
+                    // Add onclick event to each <li> to fetch courses
+                    studentlistItem.addEventListener('click', event => {
+                        fetchCourses(student.id);
+                    });
+                    // Append each <li> to the studentList UL element
+                    studentListContainer.appendChild(studentlistItem);
+                    });
+                })
+        }
+        
+
+        // Function to fetch and display courses for a student
+        async function fetchCourses(studentId) {
+            fetch('https://65e0d5a9d3db23f7624a2a61.mockapi.io/students/${studentId}+/courses')
+                .then(response => {
+                    
+                    return response.json();
+                })
+                .then(coursedata => {
+                    const courseListContainer = document.getElementById('courseList');
+                    courseListContainer.innerHTML = '';
+                    // Iterate over the courses data and create list items
+                    coursedata.forEach(course => {
+                        const courselistItem = document.createElement('li');
+                        courselistItem.textContent = `${course.name} - Unit: ${course.unit}`;
+                        // Append each <li> to the courseList UL element
+                        courseListContainer.appendChild(courselistItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                })
+        }
+
+        // Fetch students on window load
+        window.onload = fetchStudents;
+    </script>
+</head>
+<body>
+    <div id="studentListSection">
+        <h1>Students</h1>
+        <ul id="studentList"></ul>
+    </div>
+    <div id="courseListSection">
+        <h2>Courses</h2>
+        <ul id="courseList"></ul>
+    </div>
+</body>
+</html>
